@@ -23,18 +23,18 @@ router.post('/add', async function (req, res, next) {
   }
 });
 
-router.get('/:id', async function (req, res, next) {
-  const product = await ProductModel.find({ _id: req.params.id });
-
-  res.status(200).json(product);
-});
-
 router.post('/orders/add', async function (req, res, next) {
   res.send('hej från api products order add end point');
 });
 
 router.get('/orders/all', async function (req, res, next) {
   res.send('hej från products orders all end point');
+});
+
+router.get('/:id', async function (req, res, next) {
+  const product = await ProductModel.find({ _id: req.params.id });
+
+  res.status(200).json(product);
 });
 
 module.exports = router;

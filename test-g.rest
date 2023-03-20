@@ -9,12 +9,14 @@ GET http://localhost:3000/users
 ###
 
 // HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
-POST http://localhost:3000/users/
+GET http://localhost:3000/users/
 Content-Type: application/json
 
 {
-  "id": "// EN USER ID"
+  "id": 1
 }
+
+
 
 ###
 
@@ -23,20 +25,20 @@ POST http://localhost:3000/users/add
 Content-Type: application/json
 
 {
-  "name": "Sven Svensson",
-  "email": "sven@mail.com",
-  "password": "123"
+  "name": "Robin",
+  "email": "robin@mail.com",
+  "password": "robin"
 }
 
 ###
 
 // LOGGA IN USER
-POST http://localhost:3000/login
+POST http://localhost:3000/users/login
 Content-Type: application/json
 
 {
-  "email": "// EN USER EMAIL",
-  "password": "// EN USER EMAIL"
+  "email": "robin@mail.com",
+  "password": "robin"
 }
 
 ###
@@ -75,27 +77,38 @@ Content-Type: application/json
 //
 
 // SKAPA ORDER FÖR EN SPECIFIK USER // PRODUCTS ÄR EN ARRAY MOTSVARANDE INNEHÅLLET I KUNDVAGN
-# POST http://localhost:3000/products/orders/add
-# Content-Type: application/json
+POST http://localhost:3000/products/orders/add
+Content-Type: application/json
 
-# {
-#   "user": "{{getUsers.response.body.$[0].id}}",
-#       "products": [
-#     {
-#       "productId": "// ID PÅ EN PRODUKT",
-#       "quantity": 1
-#     },
-#     {
-#       "productId": "// ID PÅ EN PRODUKT",
-#       "quantity": 2
-#     }
-#   ]
-# }
+{
+  "user": "{{getUsers.response.body.$[0].id}}",
+      "products": [
+    {
+      "productId": "// ID PÅ EN PRODUKT",
+      "quantity": 1
+    },
+    {
+      "productId": "// ID PÅ EN PRODUKT",
+      "quantity": 2
+    }
+  ]
+}
 
 ###
 
 
 // HÄMTA ALLA ORDERS
 GET http://localhost:3000/products/orders/all/
+
+###
+
+
+
+
+
+###
+
+
+DELETE http://localhost:3000/users/64186e71aba8e35950cad4ca
 
 ###

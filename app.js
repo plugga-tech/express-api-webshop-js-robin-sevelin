@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const MongoClient = require('mongodb').MongoClient;
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,5 +19,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
+
+MongoClient.connect('mongodb://127.0.0.1:27017', {
+  useUnifiedTopology: true,
+}).then((client) => {
+  console.log('Vi är uppkopplade mot databasen!');
+
+  const db = client.db('robin-sevelin');
+
+  app.locals.db = db;
+});
 
 module.exports = app;

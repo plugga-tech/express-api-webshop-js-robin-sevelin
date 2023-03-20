@@ -2,11 +2,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const MongoClient = require('mongodb').MongoClient;
+
+const mongoose = require('mongoose');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-const apiRouter = require('./routes/api');
+const productsRouter = require('./routes/products');
 
 var app = express();
 
@@ -18,16 +19,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/api', apiRouter);
+app.use('/products', productsRouter);
 
-MongoClient.connect('mongodb://127.0.0.1:27017', {
-  useUnifiedTopology: true,
-}).then((client) => {
-  console.log('Vi är uppkopplade mot databasen!');
+async function init() {
+  try {
+    const options = { useUnifiedTopology: true, useNewUrlParser: true };
 
-  const db = client.db('robin-sevelin');
+    await mongoose.connect('mongodb://localhost:27017/robin-sevelin', options);
+    console.log('Vi är uppkopplade mot databasen!');
+  } catch (error) {
+    console.error(error);
+  }
+}
 
-  app.locals.db = db;
-});
+init();
 
 module.exports = app;

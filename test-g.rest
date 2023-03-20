@@ -23,9 +23,9 @@ POST http://localhost:3000/users/add
 Content-Type: application/json
 
 {
-  "name": "Test Testsson",
-  "email": "test@mail.com",
-  "password": "test"
+  "name": "Sven Svensson",
+  "email": "sven@mail.com",
+  "password": "123"
 }
 
 ###
@@ -62,10 +62,10 @@ POST http://localhost:3000/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 2",
-  "description": "Beskrivning av produkt 2",
-  "price": 100, 
-  "lager": 10
+  "name": "Metallica t-shirt",
+  "description": "Svart t-shirt med Metallica tryck",
+  "price": 50, 
+  "lager": 5
 }
 
 ###

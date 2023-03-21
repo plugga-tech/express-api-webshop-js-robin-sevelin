@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "64199864f6c26124fc334a2d"
+  "id": "6419db4af8abdae127c09253"
 }
 
 
@@ -36,8 +36,8 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "jessica@mail.com",
-  "password": "jessica"
+  "email": "robin@mail.com",
+  "password": "robin"
 }
 
 ###
@@ -54,7 +54,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/id/6419876f72334fdcfdad7af0
+GET http://localhost:3000/api/products/6419876f72334fdcfdad7af0
 
 ###
 
@@ -80,7 +80,7 @@ POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
-  "user": "{{getUsers.response.body.$[0].id}}",
+  "user": "64199864f6c26124fc334a2d",
       "products": [
     {
       "productId": "6419876f72334fdcfdad7af0",
@@ -103,7 +103,4 @@ GET http://localhost:3000/api/orders/all/
 
 
 
-
-
-###
 

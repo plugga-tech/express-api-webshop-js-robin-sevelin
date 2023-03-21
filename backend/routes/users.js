@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
+
 const UserModel = require('../models/user-models');
+const CryptoJS = require('crypto-js');
 
 /* GET users listing. */
 router.get('/', async function (req, res) {
@@ -14,9 +16,7 @@ router.get('/', async function (req, res) {
 
 router.post('/', async function (req, res) {
   try {
-    const {} = req.body;
-
-    const foundUser = await UserModel.findOne({}).populate();
+    const foundUser = await UserModel.findOne({ _id: req.body.id });
 
     res.status(200).json(foundUser);
   } catch (e) {
@@ -26,7 +26,15 @@ router.post('/', async function (req, res) {
 
 router.post('/add', async function (req, res) {
   try {
-    const newUser = await UserModel.create(req.body);
+    const name = req.body.name;
+    const email = req.body.email;
+
+    const password = CryptoJS.AES.encrypt(
+      req.body.password,
+      'Salt Nyckel'
+    ).toString();
+
+    const newUser = await UserModel.create({ name, email, password });
 
     console.log(newUser);
 
@@ -38,10 +46,11 @@ router.post('/add', async function (req, res) {
 
 router.post('/login', async function (req, res) {
   try {
-    const { email, password } = req.body;
-    const foundUser = await UserModel.findOne(req.body);
+    const email = req.body.email;
+    const password = req.body.password;
+    const foundUser = await UserModel.findOne({ email });
 
-    if (password === foundUser.password && email === foundUser.email) {
+    if (password === req.body.password) {
       res.status(201).json(`${foundUser.name} har loggat in`);
     } else {
       res.status(401).json('ingen användare hittad');

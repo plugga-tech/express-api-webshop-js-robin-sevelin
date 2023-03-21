@@ -23,11 +23,9 @@ router.post('/add', async function (req, res, next) {
   }
 });
 
-router.get('/id/:id', async function (req, res, next) {
+router.get('/:id', async function (req, res, next) {
   try {
     const product = await ProductModel.findById({ _id: req.params.id });
-
-    console.log('hej');
 
     if (product) {
       res.status(200).json(product);

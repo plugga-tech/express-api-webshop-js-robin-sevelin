@@ -5,9 +5,20 @@ const UserModel = require('../models/user-models');
 /* GET users listing. */
 router.get('/', async function (req, res) {
   try {
-    const users = await UserModel.find({}, 'id name email');
-
+    const users = await UserModel.find({}, 'name email');
     res.status(200).json(users);
+  } catch (e) {
+    console.error(e.message);
+  }
+});
+
+router.post('/', async function (req, res) {
+  try {
+    const {} = req.body;
+
+    const foundUser = await UserModel.findOne({}).populate();
+
+    res.status(200).json(foundUser);
   } catch (e) {
     console.error(e.message);
   }
@@ -15,12 +26,9 @@ router.get('/', async function (req, res) {
 
 router.post('/add', async function (req, res) {
   try {
-    const users = [];
     const newUser = await UserModel.create(req.body);
-    newUser.id = users.length + 1;
-    users.push(newUser);
 
-    console.log(users);
+    console.log(newUser);
 
     res.status(201).json(newUser);
   } catch (e) {
@@ -43,24 +51,15 @@ router.post('/login', async function (req, res) {
   }
 });
 
-router.delete('/:id', async function (req, res) {
-  await UserModel.findByIdAndDelete({ _id: req.params.id });
-
-  res.status(200).json('user borttagen');
-});
-
-router.get('/', async function (req, res) {
+router.delete('/delete/:id', async function (req, res) {
   try {
-    const { id } = req.body;
-    const foundUser = await UserModel.findOne(req.body);
+    const foundUser = await UserModel.findByIdAndDelete({ _id: req.params.id });
 
-    if (id === foundUser.id) {
-      res.status(201).json(`${foundUser.name} har hittats`);
+    if (foundUser) {
+      res.status(200).json('user borttagen');
     } else {
-      res.status(401).json('ingen användare hittad');
+      res.status(401).json('hittade ingen user');
     }
-
-    res.status(200).json(user);
   } catch (e) {
     console.error(e.message);
   }

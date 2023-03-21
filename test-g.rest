@@ -4,41 +4,40 @@
 
 // HÄMTA ALLA USERS // SKICKA INTE MED LÖSENORD // BARA ID, NAMN + EMAIL PÅ ALLA USERS
 # @name getUsers
-GET http://localhost:3000/users
+GET http://localhost:3000/api/users
 
 ###
 
 // HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
-GET http://localhost:3000/users/
+POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": 1
+  "id": "64199864f6c26124fc334a2d"
 }
-
 
 
 ###
 
 // SKAPA USER
-POST http://localhost:3000/users/add
+POST http://localhost:3000/api/users/add
 Content-Type: application/json
 
 {
-  "name": "Robin",
-  "email": "robin@mail.com",
-  "password": "robin"
+  "name": "Jessica",
+  "email": "jessica@mail.com",
+  "password": "jessica"
 }
 
 ###
 
 // LOGGA IN USER
-POST http://localhost:3000/users/login
+POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "robin@mail.com",
-  "password": "robin"
+  "email": "jessica@mail.com",
+  "password": "jessica"
 }
 
 ###
@@ -50,22 +49,22 @@ Content-Type: application/json
 // HÄMTA ALLA PRODUKTER
 
 # @name getProducts
-GET http://localhost:3000/products
+GET http://localhost:3000/api/products
 
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/products/64185fadd456fbef64af6c73
+GET http://localhost:3000/api/products/id/6419876f72334fdcfdad7af0
 
 ###
 
 // SKAPA PRODUKT
-POST http://localhost:3000/products/add
+POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Metallica t-shirt",
-  "description": "Svart t-shirt med Metallica tryck",
+  "name": "Ett äpple",
+  "description": "rött äpple",
   "price": 50, 
   "lager": 5
 }
@@ -77,18 +76,18 @@ Content-Type: application/json
 //
 
 // SKAPA ORDER FÖR EN SPECIFIK USER // PRODUCTS ÄR EN ARRAY MOTSVARANDE INNEHÅLLET I KUNDVAGN
-POST http://localhost:3000/products/orders/add
+POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
   "user": "{{getUsers.response.body.$[0].id}}",
       "products": [
     {
-      "productId": "// ID PÅ EN PRODUKT",
+      "productId": "6419876f72334fdcfdad7af0",
       "quantity": 1
     },
     {
-      "productId": "// ID PÅ EN PRODUKT",
+      "productId": "641987a372334fdcfdad7af2",
       "quantity": 2
     }
   ]
@@ -98,7 +97,7 @@ Content-Type: application/json
 
 
 // HÄMTA ALLA ORDERS
-GET http://localhost:3000/products/orders/all/
+GET http://localhost:3000/api/orders/all/
 
 ###
 
@@ -108,7 +107,3 @@ GET http://localhost:3000/products/orders/all/
 
 ###
 
-
-DELETE http://localhost:3000/users/64186e71aba8e35950cad4ca
-
-###

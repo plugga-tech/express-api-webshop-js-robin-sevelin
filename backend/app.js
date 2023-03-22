@@ -1,16 +1,18 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+
+require('dotenv').config();
 
 const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const productsRouter = require('./routes/products');
 const ordersRouter = require('./routes/orders');
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -27,7 +29,7 @@ async function init() {
   try {
     const options = { useUnifiedTopology: true, useNewUrlParser: true };
 
-    await mongoose.connect('mongodb://localhost:27017/robin-sevelin', options);
+    await mongoose.connect(process.env.MONGODB_URI, options);
     console.log('Vi är uppkopplade mot databasen!');
   } catch (error) {
     console.error(error);

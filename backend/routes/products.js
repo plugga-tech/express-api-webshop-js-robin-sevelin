@@ -15,9 +15,9 @@ router.get('/', async function (req, res, next) {
 
 router.post('/add', async function (req, res, next) {
   try {
-    const product = await ProductModel.create(req.body);
+    const newProduct = await ProductModel.create(req.body);
 
-    res.status(201).json(product);
+    res.status(201).json(newProduct);
   } catch (e) {
     console.error(e.message);
   }

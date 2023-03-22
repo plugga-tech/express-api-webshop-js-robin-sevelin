@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "6419db4af8abdae127c09253"
+  "id": "641a02b16d60940bf874091a"
 }
 
 
@@ -36,8 +36,8 @@ POST http://localhost:3000/api/users/login
 Content-Type: application/json
 
 {
-  "email": "robin@mail.com",
-  "password": "robin"
+  "email": "alfons@mail.com",
+  "password": "alfons"
 }
 
 ###
@@ -54,7 +54,7 @@ GET http://localhost:3000/api/products
 ###
 
 // HÄMTA SPECIFIK PRODUKT
-GET http://localhost:3000/api/products/6419876f72334fdcfdad7af0
+GET http://localhost:3000/api/products/641ac21e58a75534f05f5c7a
 
 ###
 
@@ -63,10 +63,10 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Ett äpple",
-  "description": "rött äpple",
-  "price": 50, 
-  "lager": 5
+  "name": "En banan",
+  "description": "gul banan",
+  "price": 45, 
+  "lager": 20
 }
 
 ###
@@ -80,15 +80,11 @@ POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
-  "user": "64199864f6c26124fc334a2d",
+  "user": "641af18f1d85b6c3f21577b6",
       "products": [
     {
-      "productId": "6419876f72334fdcfdad7af0",
-      "quantity": 1
-    },
-    {
-      "productId": "641987a372334fdcfdad7af2",
-      "quantity": 2
+      "productId": "641af2101d85b6c3f21577bb",
+      "quantity": 10
     }
   ]
 }

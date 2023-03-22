@@ -26,13 +26,7 @@ router.post('/', async function (req, res) {
 
 router.post('/add', async function (req, res) {
   try {
-    const name = req.body.name;
-    const email = req.body.email;
-
-    const password = CryptoJS.AES.encrypt(
-      req.body.password,
-      'Salt Nyckel'
-    ).toString();
+    const { name, email, password } = req.body;
 
     const newUser = await UserModel.create({ name, email, password });
 
@@ -46,28 +40,14 @@ router.post('/add', async function (req, res) {
 
 router.post('/login', async function (req, res) {
   try {
-    const email = req.body.email;
-    const password = req.body.password;
-    const foundUser = await UserModel.findOne({ email });
+    const { email, password } = req.body;
 
-    if (password === req.body.password) {
-      res.status(201).json(`${foundUser.name} har loggat in`);
+    const logUser = await UserModel.findOne({ email, password });
+
+    if (logUser) {
+      res.status(201).json(`du har loggat in`);
     } else {
-      res.status(401).json('ingen användare hittad');
-    }
-  } catch (e) {
-    console.error(e.message);
-  }
-});
-
-router.delete('/delete/:id', async function (req, res) {
-  try {
-    const foundUser = await UserModel.findByIdAndDelete({ _id: req.params.id });
-
-    if (foundUser) {
-      res.status(200).json('user borttagen');
-    } else {
-      res.status(401).json('hittade ingen user');
+      res.status(401).json('inloggningen misslyckades');
     }
   } catch (e) {
     console.error(e.message);

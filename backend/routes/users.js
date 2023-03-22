@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const UserModel = require('../models/user-models');
-const CryptoJS = require('crypto-js');
+const bcrypt = require('bcrypt');
 
 /* GET users listing. */
 router.get('/', async function (req, res) {
@@ -26,9 +26,16 @@ router.post('/', async function (req, res) {
 
 router.post('/add', async function (req, res) {
   try {
-    const { name, email, password } = req.body;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    const newUser = await UserModel.create({ name, email, password });
+    const { name, email } = req.body;
+
+    const newUser = await UserModel.create({
+      name,
+      email,
+      password: hashedPassword,
+    });
 
     console.log(newUser);
 
@@ -39,15 +46,17 @@ router.post('/add', async function (req, res) {
 });
 
 router.post('/login', async function (req, res) {
+  const user = await UserModel.findOne({ email: req.body.email });
+
+  if (!user) {
+    res.status(400).send('hittade ingen användare');
+  }
+
   try {
-    const { email, password } = req.body;
-
-    const logUser = await UserModel.findOne({ email, password });
-
-    if (logUser) {
-      res.status(201).json(`du har loggat in`);
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      res.send('success');
     } else {
-      res.status(401).json('inloggningen misslyckades');
+      res.send('not allowed');
     }
   } catch (e) {
     console.error(e.message);

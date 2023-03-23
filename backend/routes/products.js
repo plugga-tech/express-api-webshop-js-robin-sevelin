@@ -9,7 +9,10 @@ router.use(cors());
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
   try {
-    const products = await ProductModel.find();
+    const products = await ProductModel.find(
+      {},
+      'name description price lager'
+    );
 
     res.status(200).json(products);
   } catch (e) {

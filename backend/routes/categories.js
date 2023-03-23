@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const CategoryModel = require('../models/category-models');
+require('dotenv').config();
 
 router.get('/', async function (req, res) {
   try {
@@ -14,6 +15,13 @@ router.get('/', async function (req, res) {
 
 router.post('/add', async function (req, res) {
   try {
+    if (req.body.token === process.env.ACCESS_KEY) {
+      const newCategory = await CategoryModel.create({ name: req.body.name });
+
+      res.status(201).json({ message: 'kategori skapad', newCategory });
+    } else {
+      res.status(401).json({ message: 'Neckad' });
+    }
   } catch (e) {
     console.error(e.message);
   }

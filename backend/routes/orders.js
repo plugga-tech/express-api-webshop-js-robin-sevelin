@@ -34,7 +34,21 @@ router.post('/add', async function (req, res) {
   }
 
   const newOrder = await OrderModel.create(req.body);
-  res.status(201).json(newOrder);
+  res.status(201).json({ message: newOrder });
+});
+
+router.post('/user', async function (req, res, next) {
+  try {
+    if (req.body.token === process.env.ACCESS_KEY) {
+      const userOrders = await OrderModel.find({ user: req.body.user });
+
+      res.status(200).json({ message: userOrders });
+    } else {
+      res.status(401).json({ message: 'inte behörig' });
+    }
+  } catch (e) {
+    console.error(e.message);
+  }
 });
 
 module.exports = router;

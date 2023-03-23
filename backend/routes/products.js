@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const ProductModel = require('../models/product-models');
+const CategoryModel = require('../models/category-models');
 require('dotenv').config();
 
 /* GET users listing. */
@@ -16,8 +17,6 @@ router.get('/', async function (req, res, next) {
 
 router.post('/add', async function (req, res, next) {
   try {
-    console.log(req.body.token);
-    console.log(process.env.ACCESS_KEY);
     if (req.body.token === process.env.ACCESS_KEY) {
       const newProduct = await ProductModel.create(req.body);
 
@@ -37,7 +36,25 @@ router.get('/:id', async function (req, res, next) {
     if (product) {
       res.status(200).json(product);
     } else {
-      res.status(401).json('ingen produkt hittad');
+      res.status(404).json('ingen produkt hittad');
+    }
+  } catch (e) {
+    console.error(e.message);
+  }
+});
+
+router.get('/category/:id', async function (req, res, next) {
+  try {
+    const foundProducts = await ProductModel.find({
+      category: req.params.id,
+    }).populate('category');
+
+    if (foundProducts) {
+      res.status(200).json({ message: foundProducts });
+    } else {
+      res
+        .status(404)
+        .json({ message: 'hittade inte några produkter i den kategorin' });
     }
   } catch (e) {
     console.error(e.message);

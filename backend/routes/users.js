@@ -29,11 +29,11 @@ router.post('/add', async function (req, res) {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    const { name, email } = req.body;
+    // const { name, email } = req.body;
 
     const newUser = await UserModel.create({
-      name,
-      email,
+      name: req.body.name,
+      email: req.body.email,
       password: hashedPassword,
     });
 

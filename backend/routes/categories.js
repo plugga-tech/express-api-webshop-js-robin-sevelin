@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const CategoryModel = require('../models/category-models');
 require('dotenv').config();
+const cors = require('cors');
+router.use(cors());
 
 router.get('/', async function (req, res) {
   try {

@@ -3,6 +3,8 @@ var router = express.Router();
 const OrderModel = require('../models/order-models');
 const ProductModel = require('../models/product-models');
 require('dotenv').config();
+const cors = require('cors');
+router.use(cors());
 
 router.get('/all/:token', async function (req, res) {
   try {

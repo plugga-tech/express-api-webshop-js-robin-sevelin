@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
 const ProductModel = require('../models/product-models');
-const CategoryModel = require('../models/category-models');
+
 require('dotenv').config();
+const cors = require('cors');
+router.use(cors());
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {

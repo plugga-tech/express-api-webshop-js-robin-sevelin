@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+cors = require('cors');
 
 require('dotenv').config();
 
@@ -26,6 +27,7 @@ app.use('/api/users', usersRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/orders', ordersRouter);
 app.use('/api/categories', categoriesRouter);
+app.use(cors());
 
 async function init() {
   try {

@@ -75,6 +75,7 @@ function renderProducts(data) {
   const ulElement = document.createElement('ul');
   const liElement = document.createElement('li');
   const addToCartButton = document.createElement('button');
+  addToCartButton.classList.add('add-to-cart');
 
   addToCartButton.innerHTML = 'lägg till i varukogen';
 
@@ -82,14 +83,10 @@ function renderProducts(data) {
   appContainer.appendChild(ulElement);
 
   for (let i = 0; i < data.length; i++) {
-    appContainer.appendChild(liElement);
-    liElement.innerHTML = `<h3>${data[i].name}</h3>
-                          <p>${data[i].description}</p>
-                          <img src="./img/red-ball.jpg" loading="lazy" with="100" height="100" alt="red-ball">
-                          <p>${data[i].price} kr</p>
-                          <p>${data[i].lager} st kvar i lager</p>`;
+    ulElement.appendChild(liElement);
+    liElement.innerHTML += `<h3>${data[i].name}</h3><p>${data[i].description}</p><img src="./img/${data[i].category.name}.jpg" loading="lazy" with="100" height="100" alt="red-ball"><p>${data[i].price} kr</p><p>${data[i].lager} st kvar i lager</p>`;
+    liElement.appendChild(addToCartButton);
   }
-  appContainer.appendChild(addToCartButton);
 
   addToCartButton.addEventListener('click', () => {
     console.log('click');

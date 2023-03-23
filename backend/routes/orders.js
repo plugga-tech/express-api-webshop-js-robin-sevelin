@@ -42,7 +42,9 @@ router.post('/add', async function (req, res) {
 router.post('/user', async function (req, res, next) {
   try {
     if (req.body.token === process.env.ACCESS_KEY) {
-      const userOrders = await OrderModel.find({ user: req.body.user });
+      const userOrders = await OrderModel.find({
+        user: req.body.user,
+      }).populate();
 
       res.status(200).json({ message: userOrders });
     } else {

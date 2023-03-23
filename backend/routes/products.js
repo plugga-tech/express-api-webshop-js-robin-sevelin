@@ -11,8 +11,8 @@ router.get('/', async function (req, res, next) {
   try {
     const products = await ProductModel.find(
       {},
-      'name description price lager'
-    );
+      'name description price lager category'
+    ).populate('category');
 
     res.status(200).json(products);
   } catch (e) {

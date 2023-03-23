@@ -37,26 +37,24 @@ router.post('/add', async function (req, res) {
       password: hashedPassword,
     });
 
-    console.log(newUser);
-
-    res.status(201).json(newUser);
+    res.status(201).json({ message: newUser });
   } catch (e) {
     console.error(e.message);
   }
 });
 
 router.post('/login', async function (req, res) {
-  const user = await UserModel.findOne({ email: req.body.email });
-
-  if (!user) {
-    res.status(400).send('hittade ingen användare');
-  }
-
   try {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      res.status(401).send({ message: 'hittade ingen användare' });
+    }
+
     if (await bcrypt.compare(req.body.password, user.password)) {
-      res.send('success');
+      res.status(200).send({ message: 'lyckades logga in' });
     } else {
-      res.send('not allowed');
+      res.status(401).send({ message: 'ej matchande lösenord' });
     }
   } catch (e) {
     console.error(e.message);

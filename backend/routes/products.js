@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const ProductModel = require('../models/product-models');
+require('dotenv').config();
 
 /* GET users listing. */
 router.get('/', async function (req, res, next) {
@@ -15,9 +16,15 @@ router.get('/', async function (req, res, next) {
 
 router.post('/add', async function (req, res, next) {
   try {
-    const newProduct = await ProductModel.create(req.body);
+    console.log(req.body.token);
+    console.log(process.env.ACCESS_KEY);
+    if (req.body.token === process.env.ACCESS_KEY) {
+      const newProduct = await ProductModel.create(req.body);
 
-    res.status(201).json(newProduct);
+      res.status(201).json(newProduct);
+    } else {
+      res.status(401).json('Invalid token');
+    }
   } catch (e) {
     console.error(e.message);
   }

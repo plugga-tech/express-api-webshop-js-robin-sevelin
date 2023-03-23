@@ -19,6 +19,12 @@ const ProductSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
+  category: {
+    type: String,
+  },
+  token: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model('product', ProductSchema);

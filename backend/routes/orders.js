@@ -2,11 +2,21 @@ var express = require('express');
 var router = express.Router();
 const OrderModel = require('../models/order-models');
 const ProductModel = require('../models/product-models');
+require('dotenv').config();
 
-router.get('/all', async function (req, res) {
-  const orders = await OrderModel.find().populate();
+router.get('/all/:token', async function (req, res) {
+  try {
+    let token = req.params.token;
 
-  res.status(200).json(orders);
+    if (token === process.env.ACCESS_KEY) {
+      const orders = await OrderModel.find().populate();
+      res.status(200).json(orders);
+    } else {
+      res.status(401).json({ message: 'Du saknar behörighet' });
+    }
+  } catch (e) {
+    console.error(e.message);
+  }
 });
 
 router.post('/add', async function (req, res) {

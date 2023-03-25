@@ -54,7 +54,7 @@ router.post('/login', async function (req, res) {
     }
 
     if (await bcrypt.compare(req.body.password, user.password)) {
-      res.status(200).send({ message: 'lyckades logga in' });
+      res.status(200).json(user.id);
     } else {
       res.status(401).send({ message: 'ej matchande lösenord' });
     }

@@ -60,11 +60,11 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 3",
-  "description": "Beskrivning av produkt 3",
-  "price": 100,
-  "lager": 10,
-  "category": "641c6004130b0c0a5089b955",
+  "name": "Produkt 4",
+  "description": "Beskrivning av produkt 4",
+  "price": 25,
+  "lager": 6,
+  "category": "641c614a130b0c0a5089b95e",
   "token": "1234key1234"
 }
 

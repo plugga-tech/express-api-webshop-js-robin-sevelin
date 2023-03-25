@@ -36,7 +36,10 @@ router.post('/add', async function (req, res, next) {
 
 router.get('/:id', async function (req, res, next) {
   try {
-    const product = await ProductModel.findById({ _id: req.params.id });
+    const product = await ProductModel.findById(
+      { _id: req.params.id },
+      'name price lager category description'
+    );
 
     if (product) {
       res.status(200).json(product);
@@ -50,12 +53,15 @@ router.get('/:id', async function (req, res, next) {
 
 router.get('/category/:id', async function (req, res, next) {
   try {
-    const foundProducts = await ProductModel.find({
-      category: req.params.id,
-    }).populate('category');
+    const foundProducts = await ProductModel.find(
+      {
+        category: req.params.id,
+      },
+      'name category price lager description'
+    ).populate('category');
 
     if (foundProducts) {
-      res.status(200).json({ message: foundProducts });
+      res.status(200).json(foundProducts);
     } else {
       res
         .status(404)

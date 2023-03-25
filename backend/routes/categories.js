@@ -9,7 +9,7 @@ router.get('/', async function (req, res) {
   try {
     const categories = await CategoryModel.find();
 
-    res.status(200).json({ message: categories });
+    res.status(200).json(categories);
   } catch (e) {
     console.error(e.message);
   }

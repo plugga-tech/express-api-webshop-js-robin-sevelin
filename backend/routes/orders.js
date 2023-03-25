@@ -36,7 +36,7 @@ router.post('/add', async function (req, res) {
   }
 
   const newOrder = await OrderModel.create(req.body);
-  res.status(201).json({ message: newOrder });
+  res.status(201).json(newOrder);
 });
 
 router.post('/user', async function (req, res, next) {
@@ -46,7 +46,7 @@ router.post('/user', async function (req, res, next) {
         user: req.body.user,
       }).populate();
 
-      res.status(200).json({ message: userOrders });
+      res.status(200).json(userOrders);
     } else {
       res.status(401).json({ message: 'inte behörig' });
     }

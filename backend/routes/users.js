@@ -39,7 +39,7 @@ router.post('/add', async function (req, res) {
       password: hashedPassword,
     });
 
-    res.status(201).json({ message: newUser });
+    res.status(201).json(newUser);
   } catch (e) {
     console.error(e.message);
   }

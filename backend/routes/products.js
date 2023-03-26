@@ -25,7 +25,13 @@ router.post('/add', async function (req, res, next) {
     if (req.body.token === process.env.ACCESS_KEY) {
       const newProduct = await ProductModel.create(req.body);
 
-      res.status(201).json(newProduct);
+      res.status(201).json({
+        _id: newProduct._id,
+        name: newProduct.name,
+        price: newProduct.price,
+        lager: newProduct.lager,
+        category: newProduct.category,
+      });
     } else {
       res.status(401).json('Invalid token');
     }
@@ -38,7 +44,7 @@ router.get('/:id', async function (req, res, next) {
   try {
     const product = await ProductModel.findById(
       { _id: req.params.id },
-      'name price lager category description'
+      '_id lager name price'
     );
 
     if (product) {

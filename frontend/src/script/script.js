@@ -2,10 +2,12 @@ const formContainer = document.getElementById('form-container');
 const createUserButton = document.getElementById('create-user-button');
 const appNav = document.getElementById('app-nav');
 const appContent = document.getElementById('app-content');
-const order = {
-  user: localStorage.getItem('user'),
-  products: [{ productId: '', quantity: 0 }],
-};
+// const order = {
+//   user: localStorage.getItem('user'),
+//   products: [{ productId: '', quantity: 0 }],
+// };
+
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
 function init() {
   if (localStorage.getItem('user')) {
@@ -35,21 +37,14 @@ function renderAppNav() {
   appNav.append(productsButton, shoppingCartButton, ordersButton, logOutButton);
 
   productsButton.addEventListener('click', () => {
-    appContent.innerHTML = '';
     fetchProducts();
   });
 
   shoppingCartButton.addEventListener('click', () => {
-    appContent.innerHTML = '';
     renderShoppingCart();
   });
 
-  ordersButton.addEventListener('click', () => {
-    appContent.innerHTML = '';
-
-    // order = { user: 'user', token: '1234key1234' };
-    // fetchOrders();
-  });
+  ordersButton.addEventListener('click', () => {});
 
   logOutButton.addEventListener('click', () => {
     localStorage.removeItem('user');
@@ -140,7 +135,6 @@ async function logInUser(user) {
     .then((loggedUser) => {
       if (loggedUser) {
         localStorage.setItem('user', loggedUser);
-        console.log(data);
         init();
       } else {
         console.log('inloggningen misslyckades');
@@ -158,6 +152,7 @@ async function fetchProducts() {
 }
 
 function renderProducts(data) {
+  appContent.innerHTML = '';
   for (let i = 0; i < data.length; i++) {
     const productContainer = document.createElement('div');
     const addToCartButton = document.createElement('button');
@@ -173,58 +168,114 @@ function renderProducts(data) {
     productContainer.appendChild(addToCartButton);
 
     addToCartButton.addEventListener('click', () => {
-      order.products[i].productId = data[i]._id;
-      order.products[i].quantity += 1;
-      console.log(order);
+      const product = data[i]._id;
+
+      addProductToCart(product);
     });
   }
 }
 
+async function addProductToCart(product) {
+  console.log(product);
+
+  await fetch('http://localhost:3000/api/products/' + product)
+    .then((res) => res.json())
+    .then((product) => {
+      const itemInCart = cart.find(
+        (cartProduct) => cartProduct._id === product._id
+      );
+      if (itemInCart) {
+        itemInCart.quantity++;
+      } else {
+        const updatedCart = [...cart, { ...product, quantity: 1 }];
+        cart = updatedCart;
+      }
+      localStorage.setItem('cart', JSON.stringify(cart));
+    });
+}
+
 function renderShoppingCart() {
+  appContent.innerHTML = '';
   const submitOrderButton = document.createElement('button');
+  const removeItemsButton = document.createElement('button');
 
   appContent.innerHTML = '<h2>varukorgen</h2>';
 
-  for (let i = 0; i < order.products.length; i++) {
+  for (let i = 0; i < cart.length; i++) {
     const cartItem = document.createElement('li');
     appContent.append(cartItem);
-    cartItem.innerHTML = `Artikel: ${order.products[i].productId}<br /> antal: ${order.products[i].quantity}`;
+    cartItem.innerHTML = `${cart[i].name}<br /> antal: ${cart[i].quantity} st`;
   }
 
-  appContent.appendChild(submitOrderButton);
+  appContent.append(submitOrderButton, removeItemsButton);
   submitOrderButton.innerHTML = 'skicka order';
+  removeItemsButton.innerHTML = 'rensa varukorgen';
 
-  submitOrderButton.addEventListener('click', () => {});
+  removeItemsButton.addEventListener('click', () => {
+    localStorage.removeItem('cart');
+    console.log('varukorgen är tömd');
+    renderShoppingCart();
+  });
+
+  submitOrderButton.addEventListener('click', () => {
+    let products = [];
+
+    const itemsInCart = JSON.parse(localStorage.getItem('cart'));
+
+    for (let i = 0; i < itemsInCart.length; i++) {
+      products.push({
+        productId: itemsInCart[i]._id,
+        quantity: itemsInCart[i].quantity,
+      });
+    }
+
+    let newOrder = {
+      user: localStorage.getItem('user'),
+      products,
+    };
+
+    sendOrder(newOrder);
+  });
 }
 
-async function sendOrder(product) {
+async function sendOrder(data) {
   await fetch('http://localhost:3000/api/orders/add', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(product),
+    body: JSON.stringify(data),
   })
     .then((res) => res.json())
-    .then((data) => {});
+    .then((data) => {
+      console.log(data);
+
+      let userOrder = {
+        user: localStorage.getItem('user'),
+        token: '1234key1234',
+      };
+
+      console.log(userOrder);
+    });
 }
 
-async function fetchOrders(order) {
+async function fetchUserOrders(data) {
   await fetch('http://localhost:3000/api/orders/user', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(order),
+    headers: {
+      'Content-Type:': 'application/json',
+      body: JSON.stringify(data),
+    },
   }).then((res) =>
     res.json().then((data) => {
       console.log(data);
-      renderOrderPage(data);
     })
   );
 }
 
 // function renderOrderPage(orders) {
-//   const orderContainer = document.createElement('div');
+//   appContent.innerHTML = '<h2>Dina ordrar</h2>';
 
 //   for (let i = 0; i < orders.length; i++) {
-//     console.log(orders[i]);
+//     console.log('hej');
 //   }
 // }
 

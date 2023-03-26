@@ -22,21 +22,22 @@ router.get('/all/:token', async function (req, res) {
 });
 
 router.post('/add', async function (req, res) {
-  for (let i = 0; i < req.body.products.length; i++) {
-    const orderAmount = req.body.products[i].quantity;
-    console.log(req.body.products[i]);
-    const updatedLager = await ProductModel.findByIdAndUpdate(
-      req.body.products[i].productId,
-      {
-        $inc: { lager: -orderAmount },
-      }
-    );
+  try {
+    for (let i = 0; i < req.body.products.length; i++) {
+      const orderAmount = req.body.products[i].quantity;
+      const updatedLager = await ProductModel.findByIdAndUpdate(
+        req.body.products[i].productId,
+        {
+          $inc: { lager: -orderAmount },
+        }
+      );
+    }
 
-    console.log(updatedLager);
+    const newOrder = await OrderModel.create(req.body);
+    res.status(201).json(newOrder);
+  } catch (e) {
+    console.error(e.message);
   }
-
-  const newOrder = await OrderModel.create(req.body);
-  res.status(201).json(newOrder);
 });
 
 router.post('/user', async function (req, res, next) {
@@ -44,7 +45,7 @@ router.post('/user', async function (req, res, next) {
     if (req.body.token === process.env.ACCESS_KEY) {
       const userOrders = await OrderModel.find({
         user: req.body.user,
-      }).populate();
+      });
 
       res.status(200).json(userOrders);
     } else {

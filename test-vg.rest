@@ -13,7 +13,7 @@ POST http://localhost:3000/api/users/
 Content-Type: application/json
 
 {
-  "id": "641b00bdc0c7ece31c038b3f"
+  "id": "641f482d9f5c921e5fd11163"
 }
 
 ###
@@ -60,11 +60,11 @@ POST http://localhost:3000/api/products/add
 Content-Type: application/json
 
 {
-  "name": "Produkt 9",
-  "description": "Beskrivning av produkt 9",
-  "price": 25,
-  "lager": 6,
-  "category": "641c614a130b0c0a5089b95e",
+  "name": "Chinos",
+  "description": "Bruna byxor",
+  "price": 34,
+  "lager": 67,
+  "category": "642085c45c71e21fa848a930",
   "token": "1234key1234"
 }
 
@@ -84,7 +84,7 @@ POST http://localhost:3000/api/categories/add
 Content-Type: application/json
 
 {
-  "name": "Blå",
+  "name": "Snacks",
   "token": "1234key1234"
 }
 
@@ -114,7 +114,7 @@ POST http://localhost:3000/api/orders/add
 Content-Type: application/json
 
 {
-  "user": "641c3fc14ebe4e0dc2ff3433",
+  "user": "641f482d9f5c921e5fd11163",
       "products": [
     {
       "productId": "641c3fc14ebe4e0dc2ff3433",
@@ -143,7 +143,7 @@ POST http://localhost:3000/api/orders/user
 Content-Type: application/json
 
 {
-    "user": "641c3fc14ebe4e0dc2ff3433",
+    "user": "641f482d9f5c921e5fd11163",
     "token": "1234key1234"
 }
 ###

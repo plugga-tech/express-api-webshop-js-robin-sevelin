@@ -2,12 +2,11 @@ const formContainer = document.getElementById('form-container');
 const createUserButton = document.getElementById('create-user-button');
 const appNav = document.getElementById('app-nav');
 const appContent = document.getElementById('app-content');
-// const order = {
-//   user: localStorage.getItem('user'),
-//   products: [{ productId: '', quantity: 0 }],
-// };
-
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+const userOrder = {
+  user: localStorage.getItem('user'),
+  token: '1234key1234',
+};
 
 function init() {
   if (localStorage.getItem('user')) {
@@ -44,7 +43,9 @@ function renderAppNav() {
     renderShoppingCart();
   });
 
-  ordersButton.addEventListener('click', () => {});
+  ordersButton.addEventListener('click', () => {
+    fetchUserOrders(userOrder);
+  });
 
   logOutButton.addEventListener('click', () => {
     localStorage.removeItem('user');
@@ -145,7 +146,6 @@ async function logInUser(user) {
 async function fetchProducts() {
   await fetch('http://localhost:3000/api/products').then((res) =>
     res.json().then((data) => {
-      console.log(data);
       renderProducts(data);
     })
   );
@@ -153,17 +153,21 @@ async function fetchProducts() {
 
 function renderProducts(data) {
   appContent.innerHTML = '';
+
+  appContent.innerHTML = '<h2>Våra produkter</h2>';
   for (let i = 0; i < data.length; i++) {
     const productContainer = document.createElement('div');
+    productContainer.classList.add('product-card');
     const addToCartButton = document.createElement('button');
+    addToCartButton.classList.add('add-to-cart-button');
 
     addToCartButton.innerHTML = 'lägg till i varukogen';
     appContent.appendChild(productContainer);
 
-    productContainer.innerHTML += `<div class="product-card"><h3>${data[i].name}</h3>${data[i].description}<br />
-      <img src="./img/röd.jpg" loading="lazy" with="100" height="100" alt="ball"><br />
+    productContainer.innerHTML += `<h3>${data[i].name}</h3>${data[i].description}<br />
+      <img src="./img/skull.png" loading="lazy" with="100" height="100" alt="ball"><br />
       kategori: ${data[i].category.name}<br />
-      pris: ${data[i].price} kr/st<br />lagerstatus: ${data[i].lager} st</div>`;
+      pris: ${data[i].price} kr/st<br />lagerstatus: ${data[i].lager} st<br />`;
 
     productContainer.appendChild(addToCartButton);
 
@@ -195,16 +199,15 @@ async function addProductToCart(product) {
 }
 
 function renderShoppingCart() {
-  appContent.innerHTML = '';
   const submitOrderButton = document.createElement('button');
   const removeItemsButton = document.createElement('button');
 
-  appContent.innerHTML = '<h2>varukorgen</h2>';
+  appContent.innerHTML = '<h2>Varukorgen</h2>';
 
   for (let i = 0; i < cart.length; i++) {
     const cartItem = document.createElement('li');
     appContent.append(cartItem);
-    cartItem.innerHTML = `${cart[i].name}<br /> antal: ${cart[i].quantity} st`;
+    cartItem.innerHTML = `<div class="cart-card">Artikel: ${cart[i].name}<br /> Antal: ${cart[i].quantity} st <br />Produkt Id: ${cart[i]._id}</div>`;
   }
 
   appContent.append(submitOrderButton, removeItemsButton);
@@ -214,7 +217,7 @@ function renderShoppingCart() {
   removeItemsButton.addEventListener('click', () => {
     localStorage.removeItem('cart');
     console.log('varukorgen är tömd');
-    renderShoppingCart();
+    location.reload();
   });
 
   submitOrderButton.addEventListener('click', () => {
@@ -235,6 +238,8 @@ function renderShoppingCart() {
     };
 
     sendOrder(newOrder);
+    appContent.innerHTML = '';
+    location.reload();
   });
 }
 
@@ -243,40 +248,38 @@ async function sendOrder(data) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-
-      let userOrder = {
-        user: localStorage.getItem('user'),
-        token: '1234key1234',
-      };
-
-      console.log(userOrder);
-    });
-}
-
-async function fetchUserOrders(data) {
-  await fetch('http://localhost:3000/api/orders/user', {
-    method: 'POST',
-    headers: {
-      'Content-Type:': 'application/json',
-      body: JSON.stringify(data),
-    },
   }).then((res) =>
     res.json().then((data) => {
       console.log(data);
     })
   );
+
+  fetchUserOrders(userOrder);
 }
 
-// function renderOrderPage(orders) {
-//   appContent.innerHTML = '<h2>Dina ordrar</h2>';
+async function fetchUserOrders(userOrder) {
+  await fetch('http://localhost:3000/api/orders/user', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userOrder),
+  })
+    .then((res) => res.json())
+    .then((orders) => {
+      renderOrderPage(orders);
+    });
+}
 
-//   for (let i = 0; i < orders.length; i++) {
-//     console.log('hej');
-//   }
-// }
+function renderOrderPage(orders) {
+  console.log(orders);
+  appContent.innerHTML = '<h2>Dina ordrar</h2>';
+
+  for (let i = 0; i < orders.length; i++) {
+    let productsList = '';
+    for (let j = 0; j < orders[i].products.length; j++) {
+      productsList += `ProduktId: ${orders[i].products[j].productId}<br />Antal: ${orders[i].products[j].quantity}`;
+    }
+    appContent.innerHTML += `<div class="order-card">Order Id: ${orders[i]._id} <br />Kund Id: ${orders[i].user}<br />Produkter: ${productsList}</div>`;
+  }
+}
 
 init();

@@ -7,6 +7,7 @@
 body {
   font-family: arial;
   margin: auto;
+  background-color: antiquewhite;
 }
 
 li {
@@ -22,11 +23,13 @@ header {
 }
 
 #app {
+  background-color: white;
   position: relative;
   top: 3rem;
   padding: 2rem;
   margin: auto;
   max-width: 960px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 #app-nav {
@@ -39,6 +42,7 @@ header {
   font-size: 1rem;
   padding: 1rem;
   width: 100px;
+  background-color: rgb(251, 132, 192);
 }
 
 .nav:hover {
@@ -47,16 +51,36 @@ header {
   cursor: pointer;
 }
 
-/* .product-card-container {
+#app-content {
+  margin-block: 2rem;
+}
+
+.cart-card {
+  margin-block: 2rem;
+}
+
+.order-card {
+  margin-block: 2rem;
+}
+
+.product-card-container {
   border: 1px solid black;
-  background-color: aqua;
-  width: 250px;
 }
 
 .product-card {
+  margin-block: 2rem;
   padding: 1rem;
-  background-color: aqua;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
-  width: 200px;
-} */
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.add-to-cart-button {
+  height: 40px;
+  width: 100px;
+  background-color: rgb(251, 132, 192);
+}
+
+.add-to-cart-button:hover {
+  transition: 0.3s ease-in-out;
+  background-color: paleturquoise;
+  cursor: pointer;
+}
